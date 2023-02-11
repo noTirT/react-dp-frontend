@@ -5,6 +5,7 @@ import "./App.scss";
 import FoodItemsTable from "./components/FoodItemsTable/FoodItemsTable";
 import { BackendResponse } from "./api/types";
 import FormInputs from "./components/FormInputs/FormInputs";
+import FileOptions from "./components/FileOptions/FileOptions";
 
 function App() {
 	const [editItem, setEditItem] = useState<IFoodItem>();
@@ -85,6 +86,7 @@ function App() {
 							fetchValues={loadValues}
 						/>
 					)}
+					<FileOptions />
 				</div>
 			</div>
 		</>

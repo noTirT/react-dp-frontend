@@ -96,6 +96,7 @@
 	border-radius: 0.5rem;
 	&:hover {
 		cursor: pointer;
+		opacity: 0.9;
 	}
 	&:disabled {
 		opacity: 0.5;

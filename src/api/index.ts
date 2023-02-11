@@ -3,8 +3,8 @@ import { IDiettype, IFoodCategory, IFoodItem } from "../types";
 import { BackendResponse } from "./types";
 
 const dpBackend = axios.create({
-	baseURL: "https://dp-backend.onrender.com/",
-	// baseURL: "http://localhost:3333/",
+	// baseURL: "https://dp-backend.onrender.com/",
+	baseURL: "http://localhost:3333/",
 	headers: {
 		"Content-Type": "application/json",
 	},
