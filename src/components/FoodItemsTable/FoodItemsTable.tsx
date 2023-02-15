@@ -123,7 +123,7 @@ function FoodItemsTable({ resetFoodItems, foodItems, setEditItem, deleteItem }: 
 										size={30}
 									/>
 									<a
-										href={`http://localhost:3333/static/${item.description}.pdf`}
+										href={`https://dp-backend.onrender.com/static/${item.description}.pdf`}
 										target="blank"
 									>
 										<FaRegFilePdf
