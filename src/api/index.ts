@@ -30,8 +30,11 @@ export async function createDietType(dietType: Omit<IDiettype, "id">) {
 	return response.data;
 }
 
-export async function createFoodItem(foodItem: Omit<IFoodItem, "id">) {
-	const response = await dpBackend.post<Omit<IFoodItem, "id">, AxiosResponse<IFoodItem>>("/food", foodItem);
+export async function createFoodItem(foodItem: Omit<IFoodItem, "id" | "description">) {
+	const response = await dpBackend.post<Omit<IFoodItem, "id" | "description">, AxiosResponse<IFoodItem>>(
+		"/food",
+		foodItem
+	);
 	return response.data;
 }
 
@@ -58,7 +61,24 @@ export async function deleteFoodCategory(id: string) {
 	return response.data;
 }
 
-export async function updateFoodItemById(id: string, updatedValues: Omit<IFoodItem, "id">) {
+export async function updateFoodItemById(id: string, updatedValues: Omit<IFoodItem, "id" | "description">) {
 	const response = await dpBackend.put(`/food/${id}`, updatedValues);
+	return response.data;
+}
+
+export async function uploadMultipleFood(items: Omit<IFoodItem, "id">[]) {
+	const response = await dpBackend.post("/food/multiple", items);
+	return response.data;
+}
+
+export async function uploadRecipe(pdf: File, values: Omit<IFoodItem, "id" | "description">) {
+	const formData = new FormData();
+	formData.append("file", pdf);
+	formData.append("data", JSON.stringify(values));
+	const response = await dpBackend.post(`/food/recipe`, formData, {
+		headers: {
+			"Content-Type": "multipart/form-data",
+		},
+	});
 	return response.data;
 }

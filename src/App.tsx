@@ -86,7 +86,7 @@ function App() {
 							fetchValues={loadValues}
 						/>
 					)}
-					<FileOptions />
+					<FileOptions fetchItems={loadValues} />
 				</div>
 			</div>
 		</>

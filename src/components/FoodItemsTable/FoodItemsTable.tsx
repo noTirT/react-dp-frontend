@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import { IFoodItem } from "../../types";
 import { capitalizeString } from "../../util";
 import "./FoodItemsTable.scss";
-import { FaTrash } from "react-icons/fa";
+import { FaRegFilePdf, FaTrash } from "react-icons/fa";
 
 interface Props {
 	foodItems: IFoodItem[];
@@ -114,13 +114,27 @@ function FoodItemsTable({ resetFoodItems, foodItems, setEditItem, deleteItem }: 
 							<div className="col col-2">{capitalizeString(item.type)}</div>
 							<div className="col col-3">{capitalizeString(item.category)}</div>
 							<div className="col col-4">
-								<FaTrash
-									onMouseOver={() => setButtonHover(true)}
-									onMouseLeave={() => setButtonHover(false)}
-									onClick={() => deleteItem(item.id)}
-									className={"deleteButton"}
-									size={30}
-								/>
+								<div className="table-option-container">
+									<FaTrash
+										onMouseOver={() => setButtonHover(true)}
+										onMouseLeave={() => setButtonHover(false)}
+										onClick={() => deleteItem(item.id)}
+										className={"deleteIcon"}
+										size={30}
+									/>
+									<a
+										href={`http://localhost:3333/static/${item.description}.pdf`}
+										target="blank"
+									>
+										<FaRegFilePdf
+											onMouseOver={() => setButtonHover(true)}
+											onMouseLeave={() => setButtonHover(false)}
+											onClick={() => console.log("first")}
+											className={"recipe-icon"}
+											size={30}
+										/>
+									</a>
+								</div>
 							</div>
 						</li>
 					))}

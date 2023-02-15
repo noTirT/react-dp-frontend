@@ -94,9 +94,10 @@
 	background-color: rgb(61, 79, 179);
 	color: white;
 	border-radius: 0.5rem;
+	transition: all 0.2s ease-in;
 	&:hover {
 		cursor: pointer;
-		opacity: 0.9;
+		opacity: 0.8;
 	}
 	&:disabled {
 		opacity: 0.5;

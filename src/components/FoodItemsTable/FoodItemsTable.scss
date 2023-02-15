@@ -40,7 +40,8 @@ h2 {
 		flex-basis: 10%;
 	}
 	.tableHeader {
-		background-color: rgba(61, 79, 179, 0.5);
+		background-color: rgb(61, 79, 179);
+		color: white;
 		font-size: 14px;
 		text-transform: uppercase;
 		letter-spacing: 0.03em;
@@ -86,9 +87,23 @@ h2 {
 			margin-right: 70px;
 			&:hover {
 				cursor: pointer;
-				color: red;
 			}
 		}
+	}
+}
+
+.table-option-container {
+	display: flex;
+	gap: 2;
+}
+
+.deleteIcon:hover {
+	color: red;
+}
+
+.recipe-icon {
+	&:hover {
+		color: green;
 	}
 }
 

@@ -1,5 +1,5 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { createFoodItem, updateFoodItemById } from "../../api";
+import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { createFoodItem, updateFoodItemById, uploadRecipe } from "../../api";
 import { IDiettype, IFoodCategory, IFoodItem, SELECTION } from "../../types";
 import { capitalizeString } from "../../util";
 import "./FormInputs.scss";
@@ -23,16 +23,17 @@ export default function FormInputs({
 	categories,
 	dietTypes,
 }: Props) {
-	const [currentValues, setCurrentValues] = useState<Omit<IFoodItem, "id"> | undefined>(() => {
+	const [currentValues, setCurrentValues] = useState<Omit<IFoodItem, "id" | "description"> | undefined>(() => {
 		if (editItem) {
 			return { ...editItem };
 		} else {
-			if (selection === "CREATE")
-				return { name: "", category: categories[0].name, type: dietTypes[0].name, description: "" };
+			if (selection === "CREATE") return { name: "", category: categories[0].name, type: dietTypes[0].name };
 		}
 		return undefined;
 	});
 	const [loading, setLoading] = useState<boolean>(false);
+
+	const recipeRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
 		if (editItem !== undefined) {
@@ -44,10 +45,15 @@ export default function FormInputs({
 
 	async function handleSubmit(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault();
-		if (currentValues) {
+		if (currentValues && recipeRef.current!.files) {
 			if (selection === "CREATE") {
 				setLoading(true);
-				const response = await createFoodItem(currentValues);
+				if (recipeRef.current!.files!.length === 0) {
+					const response = await createFoodItem(currentValues);
+				} else {
+					const fileResponse = await uploadRecipe(recipeRef.current!.files![0], currentValues);
+					recipeRef.current!.value = "";
+				}
 				resetForm();
 				fetchValues();
 				setLoading(false);
@@ -67,7 +73,7 @@ export default function FormInputs({
 	function clickCreate() {
 		setSelection("CREATE");
 		cancelEdit();
-		setCurrentValues({ name: "", category: categories[0].name, type: dietTypes[0].name, description: "" });
+		setCurrentValues({ name: "", category: categories[0].name, type: dietTypes[0].name });
 	}
 
 	function handleReset(e: FormEvent<HTMLFormElement>) {
@@ -77,7 +83,7 @@ export default function FormInputs({
 
 	function resetForm() {
 		if (editItem) setCurrentValues({ ...editItem });
-		else setCurrentValues({ name: "", category: categories[0].name, type: dietTypes[0].name, description: "" });
+		else setCurrentValues({ name: "", category: categories[0].name, type: dietTypes[0].name });
 	}
 
 	function handleChange(e: ChangeEvent<any>) {
@@ -136,6 +142,7 @@ export default function FormInputs({
 									name="name"
 									onChange={handleChange}
 									value={currentValues?.name}
+									autoComplete={"off"}
 								/>
 								<br />
 								<label htmlFor="category-input">Kategorie wählen</label>
@@ -176,17 +183,24 @@ export default function FormInputs({
 									))}
 								</select>
 								<br />
-								<label htmlFor="description-input">Beschreibung</label>
+								<label htmlFor="description-input">Rezept</label>
 								<br />
-								<textarea
-									name="description"
-									id="description-input"
-									className="description-input"
-									onChange={handleChange}
-									value={currentValues?.description}
-								>
-									{currentValues?.description}
-								</textarea>
+								<div style={{ display: "flex" }}>
+									<button
+										className="form-button"
+										id="description-input"
+										type="button"
+										onClick={() => recipeRef.current!.click()}
+									>
+										Datei wählen
+									</button>
+									<p>(Optional)</p>
+								</div>
+								<input
+									type="file"
+									style={{ display: "none" }}
+									ref={recipeRef}
+								/>
 								<br />
 								<div style={{ display: "flex" }}>
 									<button
