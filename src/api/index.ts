@@ -1,14 +1,25 @@
 import axios, { AxiosResponse } from "axios";
-import { IDiettype, IFoodCategory, IFoodItem } from "../types";
+import { IDiettype, IFoodCategory, IFoodItem, PlanParameters } from "../types";
 import { BackendResponse } from "./types";
 
 const dpBackend = axios.create({
-	baseURL: "https://dp-backend.onrender.com/",
-	// baseURL: "http://localhost:3333/",
+	baseURL: import.meta.env.VITE_BASE_URL,
 	headers: {
 		"Content-Type": "application/json",
 	},
 });
+
+dpBackend.interceptors.response.use(
+	(response) => {
+		if (response.data.message === "error") {
+			console.log(response.data);
+		}
+		return response;
+	},
+	(error) => {
+		console.log("error caught:", error);
+	}
+);
 
 export async function getAllDiettypes() {
 	const response = await dpBackend.get<BackendResponse<IDiettype[]>>("/diettype");
@@ -26,23 +37,17 @@ export async function getAllFootCategories() {
 }
 
 export async function createDietType(dietType: Omit<IDiettype, "id">) {
-	const response = await dpBackend.post<Omit<IDiettype, "id">, AxiosResponse<IDiettype>>("/diettype", dietType);
+	const response = await dpBackend.post<BackendResponse<IDiettype>>("/diettype", dietType);
 	return response.data;
 }
 
 export async function createFoodItem(foodItem: Omit<IFoodItem, "id" | "description">) {
-	const response = await dpBackend.post<Omit<IFoodItem, "id" | "description">, AxiosResponse<IFoodItem>>(
-		"/food",
-		foodItem
-	);
+	const response = await dpBackend.post<BackendResponse<IFoodItem>>("/food", foodItem);
 	return response.data;
 }
 
 export async function createFoodCategory(foodCategory: Omit<IFoodCategory, "id">) {
-	const response = await dpBackend.post<Omit<IFoodCategory, "id">, AxiosResponse<IFoodCategory>>(
-		"/foodcategory",
-		foodCategory
-	);
+	const response = await dpBackend.post<BackendResponse<IFoodCategory>>("/foodcategory", foodCategory);
 	return response.data;
 }
 
@@ -62,7 +67,7 @@ export async function deleteFoodCategory(id: string) {
 }
 
 export async function updateFoodItemById(id: string, updatedValues: Omit<IFoodItem, "id" | "description">) {
-	const response = await dpBackend.put(`/food/${id}`, updatedValues);
+	const response = await dpBackend.put<BackendResponse<IFoodItem>>(`/food/${id}`, updatedValues);
 	return response.data;
 }
 
@@ -80,5 +85,10 @@ export async function uploadRecipe(pdf: File, values: Omit<IFoodItem, "id" | "de
 			"Content-Type": "multipart/form-data",
 		},
 	});
+	return response.data;
+}
+
+export async function generatePlan(data: PlanParameters) {
+	const response = await dpBackend.post<BackendResponse<IFoodItem[]>>("/planner", data);
 	return response.data;
 }

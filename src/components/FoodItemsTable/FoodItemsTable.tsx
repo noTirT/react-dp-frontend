@@ -9,12 +9,13 @@ interface Props {
 	setEditItem: (foodItem: IFoodItem) => void;
 	deleteItem: (id: string) => void;
 	resetFoodItems: () => void;
+	disabled: boolean;
 }
 
 const UPARROW = "\t" + String.fromCharCode(8593);
 const DOWNARROW = "\t" + String.fromCharCode(8595);
 
-function FoodItemsTable({ resetFoodItems, foodItems, setEditItem, deleteItem }: Props) {
+function FoodItemsTable({ resetFoodItems, foodItems, setEditItem, deleteItem, disabled }: Props) {
 	const [buttonHover, setButtonHover] = useState<boolean>(false);
 	const [sortingDetails, setSortingDetails] = useState<{ key: keyof IFoodItem; reversed: boolean }>();
 	const [localFood, setLocalFood] = useState<IFoodItem[]>([...foodItems]);
@@ -24,6 +25,7 @@ function FoodItemsTable({ resetFoodItems, foodItems, setEditItem, deleteItem }: 
 	}, [foodItems]);
 
 	function handleSortingClick(key: keyof IFoodItem) {
+		if (disabled) return;
 		let reversed = undefined;
 
 		if (sortingDetails === undefined) {
@@ -108,7 +110,7 @@ function FoodItemsTable({ resetFoodItems, foodItems, setEditItem, deleteItem }: 
 						<li
 							className="tableRow"
 							key={`tableRow_${index}`}
-							onClick={() => !buttonHover && setEditItem(item)}
+							onClick={() => !buttonHover && !disabled && setEditItem(item)}
 						>
 							<div className="col col-1">{item.name}</div>
 							<div className="col col-2">{capitalizeString(item.type)}</div>
@@ -118,18 +120,18 @@ function FoodItemsTable({ resetFoodItems, foodItems, setEditItem, deleteItem }: 
 									<FaTrash
 										onMouseOver={() => setButtonHover(true)}
 										onMouseLeave={() => setButtonHover(false)}
-										onClick={() => deleteItem(item.id)}
+										onClick={() => !disabled && deleteItem(item.id)}
 										className={"deleteIcon"}
 										size={30}
 									/>
 									<a
-										href={`https://dp-backend.onrender.com/static/${item.description}.pdf`}
+										href={`${import.meta.env.VITE_BASE_URL}static/${item.description}.pdf`}
 										target="blank"
+										style={{ pointerEvents: disabled ? "none" : "all" }}
 									>
 										<FaRegFilePdf
 											onMouseOver={() => setButtonHover(true)}
 											onMouseLeave={() => setButtonHover(false)}
-											onClick={() => console.log("first")}
 											className={"recipe-icon"}
 											size={30}
 										/>

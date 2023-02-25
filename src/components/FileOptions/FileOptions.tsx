@@ -7,8 +7,10 @@ import { IFoodItem } from "../../types";
 
 interface Props {
 	fetchItems: () => void;
+	openPlanModal: () => void;
+	disabled: boolean;
 }
-function FileOptions({ fetchItems }: Props) {
+function FileOptions({ fetchItems, openPlanModal, disabled }: Props) {
 	const csvInputRef = useRef<HTMLInputElement>(null);
 
 	async function downloadFoodCSV() {
@@ -22,12 +24,7 @@ function FileOptions({ fetchItems }: Props) {
 
 	function checkCSVHeader(header: unknown): boolean {
 		const headerArray = header as string[];
-		return (
-			headerArray.includes("name") &&
-			headerArray.includes("description") &&
-			headerArray.includes("type") &&
-			headerArray.includes("category")
-		);
+		return headerArray.includes("name") && headerArray.includes("type") && headerArray.includes("category");
 	}
 
 	async function uploadFoodCsv() {
@@ -43,7 +40,7 @@ function FileOptions({ fetchItems }: Props) {
 						foodItems.push({
 							name: row[data[0].indexOf("name")],
 							type: row[data[0].indexOf("type")],
-							description: row[data[0].indexOf("description")],
+							description: "placeholder",
 							category: row[data[0].indexOf("category")],
 						});
 					}
@@ -60,6 +57,7 @@ function FileOptions({ fetchItems }: Props) {
 				<button
 					className="csv-button"
 					onClick={() => csvInputRef.current!.click()}
+					disabled={disabled}
 				>
 					Importieren
 				</button>
@@ -74,9 +72,17 @@ function FileOptions({ fetchItems }: Props) {
 				/>
 				<button
 					className="csv-button"
+					disabled={disabled}
 					onClick={downloadFoodCSV}
 				>
 					Exportieren
+				</button>
+				<button
+					className="csv-button"
+					disabled={disabled}
+					onClick={openPlanModal}
+				>
+					Plan
 				</button>
 			</div>
 		</div>

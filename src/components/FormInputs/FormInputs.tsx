@@ -12,6 +12,7 @@ interface Props {
 	editItem: IFoodItem | undefined;
 	cancelEdit: () => void;
 	fetchValues: () => void;
+	disabled: boolean;
 }
 
 export default function FormInputs({
@@ -22,6 +23,7 @@ export default function FormInputs({
 	setSelection,
 	categories,
 	dietTypes,
+	disabled,
 }: Props) {
 	const [currentValues, setCurrentValues] = useState<Omit<IFoodItem, "id" | "description"> | undefined>(() => {
 		if (editItem) {
@@ -46,27 +48,24 @@ export default function FormInputs({
 	async function handleSubmit(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		if (currentValues && recipeRef.current!.files) {
+			setLoading(true);
 			if (selection === "CREATE") {
-				setLoading(true);
 				if (recipeRef.current!.files!.length === 0) {
-					const response = await createFoodItem(currentValues);
+					await createFoodItem(currentValues);
 				} else {
-					const fileResponse = await uploadRecipe(recipeRef.current!.files![0], currentValues);
+					await uploadRecipe(recipeRef.current!.files![0], currentValues);
 					recipeRef.current!.value = "";
 				}
 				resetForm();
-				fetchValues();
-				setLoading(false);
 			} else {
 				if (editItem) {
-					setLoading(true);
-					const response = await updateFoodItemById(editItem.id, currentValues);
+					await updateFoodItemById(editItem.id, currentValues);
 					cancelEdit();
 					clickCreate();
-					fetchValues();
-					setLoading(false);
 				}
 			}
+			setLoading(false);
+			fetchValues();
 		}
 	}
 
@@ -74,6 +73,7 @@ export default function FormInputs({
 		setSelection("CREATE");
 		cancelEdit();
 		setCurrentValues({ name: "", category: categories[0].name, type: dietTypes[0].name });
+		recipeRef.current!.value = "";
 	}
 
 	function handleReset(e: FormEvent<HTMLFormElement>) {
@@ -107,7 +107,7 @@ export default function FormInputs({
 				<div className="btn-container">
 					<a
 						className={`btn ${selection === "CREATE" && "selected"}`}
-						onClick={clickCreate}
+						onClick={() => !disabled && clickCreate()}
 						style={{ pointerEvents: loading ? "none" : "auto" }}
 					>
 						Neu
@@ -115,6 +115,7 @@ export default function FormInputs({
 					<a
 						className={`btn ${selection === "EDIT" && "selected"}`}
 						onClick={() => {
+							if (disabled) return;
 							setSelection("EDIT");
 							cancelEdit();
 						}}
@@ -129,7 +130,7 @@ export default function FormInputs({
 						onReset={handleReset}
 					>
 						<fieldset
-							disabled={(selection === "EDIT" && editItem === undefined) || loading}
+							disabled={(selection === "EDIT" && editItem === undefined) || loading || disabled}
 							className="form-fieldset"
 						>
 							<div className="input-container">

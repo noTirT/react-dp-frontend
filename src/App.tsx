@@ -6,12 +6,14 @@ import FoodItemsTable from "./components/FoodItemsTable/FoodItemsTable";
 import { BackendResponse } from "./api/types";
 import FormInputs from "./components/FormInputs/FormInputs";
 import FileOptions from "./components/FileOptions/FileOptions";
+import PlanModal from "./components/PlanModal/PlanModal";
 
 function App() {
 	const [editItem, setEditItem] = useState<IFoodItem>();
 	const [categories, setCategories] = useState<IFoodCategory[]>([] as IFoodCategory[]);
 	const [dietTypes, setDietTypes] = useState<IDiettype[]>([] as IDiettype[]);
 	const [allFoodItems, setAllFoodItems] = useState<IFoodItem[]>([] as IFoodItem[]);
+	const [showPlan, setShowPlan] = useState<boolean>(false);
 
 	const [formSelection, setFormSelection] = useState<SELECTION>("CREATE");
 
@@ -66,15 +68,22 @@ function App() {
 	return (
 		<>
 			<div className={"mainflex"}>
-				<div className="table-container">
+				<div
+					className="table-container"
+					style={{ opacity: showPlan ? ".5" : "1" }}
+				>
 					<FoodItemsTable
 						foodItems={allFoodItems}
 						setEditItem={updateEditItem}
 						deleteItem={deleteFoodItem}
 						resetFoodItems={resetFoodItems}
+						disabled={showPlan}
 					/>
 				</div>
-				<div className="editItemContainer">
+				<div
+					className="editItemContainer"
+					style={{ opacity: showPlan ? ".5" : "1" }}
+				>
 					{dietTypes.length > 0 && (
 						<FormInputs
 							selection={formSelection}
@@ -84,9 +93,22 @@ function App() {
 							dietTypes={dietTypes}
 							cancelEdit={cancelEdit}
 							fetchValues={loadValues}
+							disabled={showPlan}
 						/>
 					)}
-					<FileOptions fetchItems={loadValues} />
+					<FileOptions
+						fetchItems={loadValues}
+						openPlanModal={() => setShowPlan(true)}
+						disabled={showPlan}
+					/>
+				</div>
+				<div style={{ display: "flex", alignItems: "center" }}>
+					<PlanModal
+						open={showPlan}
+						close={() => setShowPlan(false)}
+						categories={categories}
+						types={dietTypes}
+					/>
 				</div>
 			</div>
 		</>

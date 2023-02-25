@@ -21,3 +21,7 @@ export function JSONtoCSV(data: any) {
 	csv = csv.join("\r\n");
 	return csv;
 }
+
+export function getDay(index: number) {
+	return ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"][index];
+}

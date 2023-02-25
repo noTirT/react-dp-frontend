@@ -22,3 +22,8 @@ const SELECTION = {
 } as const;
 
 export type SELECTION = typeof SELECTION[keyof typeof SELECTION];
+
+export interface PlanParameters {
+	types?: string[];
+	categories?: string[];
+}
