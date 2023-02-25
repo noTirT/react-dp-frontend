@@ -1,4 +1,4 @@
-$blue: rgb(61, 79, 179);
+@use "../../stylesheets/colors";
 
 .csv-option-container {
 	width: 25vw;
@@ -20,14 +20,14 @@ $blue: rgb(61, 79, 179);
 	appearance: none;
 	-webkit-appearance: none;
 	border: none;
-	background: $blue;
+	background: colors.$btn-blue;
 	font-size: 24px;
 	color: white;
 	transition: all 0.3s ease-in;
 	&:hover {
 		cursor: pointer;
 		background: white;
-		color: $blue;
+		color: colors.$btn-blue;
 		font-weight: bold;
 	}
 	&:disabled {

@@ -1,0 +1,38 @@
+@use "colors";
+
+@mixin default-btn() {
+	appearance: none;
+	-webkit-appearance: none;
+	padding: 10px;
+	border: none;
+	margin: 10px 10px 10px 0;
+	background-color: colors.$btn-blue;
+	color: white;
+	border-radius: 0.5rem;
+	transition: all 0.2s ease-in;
+	&:hover {
+		cursor: pointer;
+		opacity: 0.8;
+	}
+	&:disabled {
+		opacity: 0.5;
+		cursor: default;
+	}
+}
+
+@mixin input-field($cursor, $width) {
+	padding: 10px;
+	margin: 10px 0;
+	border: 0;
+	background-color: rgb(226, 224, 224);
+	border-radius: 0.5rem;
+	width: $width;
+	transition: 0.3s box-shadow;
+	&:hover:enabled {
+		box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+		cursor: $cursor;
+	}
+	&:focus {
+		outline: none;
+	}
+}

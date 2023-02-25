@@ -1,3 +1,6 @@
+@use "../../stylesheets/mixins.scss";
+@use "../../stylesheets/colors";
+
 .tab-container {
 	height: 60vh;
 	width: 25vw;
@@ -53,19 +56,7 @@
 
 .name-input,
 .description-input {
-	padding: 10px;
-	margin: 10px 0;
-	border: 0;
-	background-color: rgb(226, 224, 224);
-	border-radius: 0.5rem;
-	width: 15vw;
-	transition: 0.3s box-shadow;
-	&:hover:enabled {
-		box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
-	}
-	&:focus {
-		outline: none;
-	}
+	@include mixins.input-field(default, 15vw);
 }
 
 .description-input {
@@ -73,36 +64,11 @@
 }
 
 .select-input {
-	padding: 10px;
-	margin: 10px 0;
-	border-radius: 0.5rem;
-	border: 0;
-	background-color: rgb(226, 224, 224);
-	transition: 0.3s box-shadow;
-	&:hover:enabled {
-		box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
-		cursor: pointer;
-	}
+	@include mixins.input-field(pointer, 10vw);
 }
 
 .form-button {
-	appearance: none;
-	-webkit-appearance: none;
-	padding: 10px;
-	border: none;
-	margin: 10px 10px 10px 0;
-	background-color: rgb(61, 79, 179);
-	color: white;
-	border-radius: 0.5rem;
-	transition: all 0.2s ease-in;
-	&:hover {
-		cursor: pointer;
-		opacity: 0.8;
-	}
-	&:disabled {
-		opacity: 0.5;
-		cursor: default;
-	}
+	@include mixins.default-btn();
 }
 
 .loading-container {
@@ -121,7 +87,7 @@
 	border-radius: 100%;
 	background-image: linear-gradient(145deg, rgba(255, 255, 255, 0.5) 0%, rgba(0, 0, 0, 0) 100%);
 	animation: bounce 1.5s 0.5s linear infinite;
-	background-color: #16a085;
+	background-color: colors.$primary-background;
 	&:nth-child(1) {
 		animation-delay: 0.1s;
 	}

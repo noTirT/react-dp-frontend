@@ -1,3 +1,5 @@
+@use "../../stylesheets/colors";
+
 body {
 	font-family: "lato", sans-serif;
 }
@@ -40,7 +42,7 @@ h2 {
 		flex-basis: 10%;
 	}
 	.tableHeader {
-		background-color: rgb(61, 79, 179);
+		background-color: colors.$btn-blue;
 		color: white;
 		font-size: 14px;
 		text-transform: uppercase;
