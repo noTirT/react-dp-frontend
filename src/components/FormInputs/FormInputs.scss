@@ -57,6 +57,23 @@
 .name-input,
 .description-input {
 	@include mixins.input-field(default, 15vw);
+
+	&:invalid {
+		border: 2px solid red;
+		animation: shake 300ms;
+	}
+}
+
+@keyframes shake {
+	25% {
+		transform: translateX(4px);
+	}
+	50% {
+		transform: translateX(-4px);
+	}
+	75% {
+		transform: translateX(4px);
+	}
 }
 
 .description-input {

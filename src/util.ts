@@ -1,5 +1,3 @@
-import { IFoodItem } from "./types";
-
 export function capitalizeString(word: string) {
 	if (word.length === 1) return word.toUpperCase();
 	return word.slice(0, 1).toUpperCase() + word.slice(1, word.length);
@@ -24,4 +22,11 @@ export function JSONtoCSV(data: any) {
 
 export function getDay(index: number) {
 	return ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"][index];
+}
+
+export function getCookie(key: string) {
+	return document.cookie
+		.split(";")
+		.find((row) => row.startsWith(`${key}=`))
+		?.split("=")[1];
 }

@@ -1,8 +1,8 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { FaRegFilePdf, FaTrash } from "react-icons/fa";
 import { IFoodItem } from "../../types";
 import { capitalizeString } from "../../util";
 import "./FoodItemsTable.scss";
-import { FaRegFilePdf, FaTrash } from "react-icons/fa";
 
 interface Props {
 	foodItems: IFoodItem[];
@@ -61,6 +61,12 @@ function FoodItemsTable({ resetFoodItems, foodItems, setEditItem, deleteItem, di
 			: "";
 	}
 
+	function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
+		setLocalFood(
+			foodItems.filter((item) => item.name.toLocaleUpperCase().startsWith(e.target.value.toLocaleUpperCase()))
+		);
+	}
+
 	return (
 		<div className={"foodItemContainer"}>
 			<h2>Alle Gerichte</h2>
@@ -69,9 +75,7 @@ function FoodItemsTable({ resetFoodItems, foodItems, setEditItem, deleteItem, di
 					type="text"
 					className="search-bar"
 					placeholder="Suchen..."
-					onChange={(e: ChangeEvent<HTMLInputElement>) =>
-						setLocalFood(foodItems.filter((item) => item.name.includes(e.target.value)))
-					}
+					onChange={handleSearch}
 				/>
 				<i className="fa fa-search search-icon" />
 			</div>
