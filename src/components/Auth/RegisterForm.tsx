@@ -18,7 +18,8 @@ function RegisterForm({ loading, setLoading, setLoggedIn }: Props) {
 		try {
 			setLoading(true);
 			await register(email, username, password, confirmPassword);
-			await login(username, password);
+			const response = await login(username, password);
+			document.cookie = `AuthToken=${response.data.authToken};`;
 			setLoggedIn(true);
 			setLoading(false);
 		} catch (err) {
